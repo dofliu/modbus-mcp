@@ -24,6 +24,7 @@ MODBUS_PARITY = os.environ.get("MODBUS_PARITY", "N")
 MODBUS_STOPBITS = int(os.environ.get("MODBUS_STOPBITS", 1))
 MODBUS_BYTESIZE = int(os.environ.get("MODBUS_BYTESIZE", 8))
 MODBUS_TIMEOUT = float(os.environ.get("MODBUS_TIMEOUT", 1))
+MODBUS_DEFAULT_SLAVE_ID = int(os.environ.get("MODBUS_DEFAULT_SLAVE_ID", 1))
 
 # Application context for dependency injection
 @dataclass
@@ -71,25 +72,24 @@ mcp = FastMCP(
 
 # Tools: Read and write Modbus registers
 @mcp.tool()
-async def read_register(address: int, ctx: Context) -> str:
+async def read_register(address: int, ctx: Context, slave_id: int = MODBUS_DEFAULT_SLAVE_ID) -> str: 
     """
     Read a single Modbus holding register.
-
     Parameters:
         address (int): The starting address of the holding register (0-65535).
-    
+        slave_id (int): The Modbus slave ID (device ID).(2025/05/12)
     Returns:
         str: The value of the register or an error message.
     """
     client = ctx.request_context.lifespan_context.modbus_client
     try:
-        result = await client.read_holding_registers(address=address, count=1, slave=1)
+        result = await client.read_holding_registers(address=address, count=1, slave=slave_id) 
         if result.isError():
-            return f"Error reading register {address}: {result}"
-        ctx.info(f"Read register {address}: {result.registers[0]}")
-        return f"Value: {result.registers[0]}"
+            return f"Error reading register {address} from slave {slave_id}: {result}"
+        ctx.info(f"Read register {address} from slave {slave_id}: {result.registers[0]}")
+        return f"Slave {slave_id}, Register {address} Value: {result.registers[0]}"
     except ModbusException as e:
-        return f"Error: {str(e)}"
+        return f"Error communicating with slave {slave_id}: {str(e)}"
 
 @mcp.tool()
 async def write_register(address: int, value: int, ctx: Context) -> str:
