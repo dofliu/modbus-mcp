@@ -45,17 +45,18 @@ The server connects to a Modbus device using parameters specified via environmen
 
 ### Environment Variables
 
-| Variable                | Description                                      | Default              | Required |
-|-------------------------|--------------------------------------------------|----------------------|----------|
-| `MODBUS_TYPE`           | Connection type: `tcp`, `udp`, or `serial`       | `tcp`                | Yes      |
-| `MODBUS_HOST`           | Host address for TCP/UDP                        | `127.0.0.1`          | For TCP/UDP |
-| `MODBUS_PORT`           | Port for TCP/UDP                                | `502`                | For TCP/UDP |
-| `MODBUS_SERIAL_PORT`    | Serial port (e.g., `/dev/ttyUSB0`, `COM1`)      | `/dev/ttyUSB0`       | For serial |
-| `MODBUS_BAUDRATE`       | Serial baud rate                                | `9600`               | For serial |
-| `MODBUS_PARITY`         | Serial parity: `N` (none), `E` (even), `O` (odd) | `N`                 | For serial |
-| `MODBUS_STOPBITS`       | Serial stop bits                                | `1`                  | For serial |
-| `MODBUS_BYTESIZE`       | Serial byte size                                | `8`                  | For serial |
-| `MODBUS_TIMEOUT`        | Serial timeout (seconds)                        | `1`                  | For serial |
+| Variable                   | Description                                      | Default              | Required |
+|-------------------------   |--------------------------------------------------|----------------------|----------|
+| `MODBUS_TYPE`              | Connection type: `tcp`, `udp`, or `serial`       | `tcp`                | Yes      |
+| `MODBUS_HOST`              | Host address for TCP/UDP                        | `127.0.0.1`          | For TCP/UDP |
+| `MODBUS_PORT`              | Port for TCP/UDP                                | `502`                | For TCP/UDP |
+| `MODBUS_DEFAULT_SLAVE_ID`  | Slave ID                                        | `1`                  | For TCP/UDP |
+| `MODBUS_SERIAL_PORT`       | Serial port (e.g., `/dev/ttyUSB0`, `COM1`)      | `/dev/ttyUSB0`       | For serial |
+| `MODBUS_BAUDRATE`          | Serial baud rate                                | `9600`               | For serial |
+| `MODBUS_PARITY`            | Serial parity: `N` (none), `E` (even), `O` (odd) | `N`                 | For serial |
+| `MODBUS_STOPBITS`          | Serial stop bits                                | `1`                  | For serial |
+| `MODBUS_BYTESIZE`          | Serial byte size                                | `8`                  | For serial |
+| `MODBUS_TIMEOUT`           | Serial timeout (seconds)                        | `1`                  | For serial |
 
 ### Example `.env` File
 
@@ -64,6 +65,7 @@ For TCP:
 MODBUS_TYPE=tcp
 MODBUS_HOST=192.168.1.100
 MODBUS_PORT=502
+MODBUS_SLAVE_ID=1
 ```
 
 For Serial:
@@ -108,7 +110,7 @@ The configuration file:
      ```json
      {
        "tool": "read_register",
-       "parameters": {"address": 0}
+       "parameters": {"address": 0, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Value: <register_value>`
@@ -122,7 +124,7 @@ The configuration file:
      ```json
      {
        "tool": "write_register",
-       "parameters": {"address": 10, "value": 100}
+       "parameters": {"address": 10, "value": 100, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Successfully wrote 100 to register 10`
@@ -136,7 +138,7 @@ The configuration file:
      ```json
      {
        "tool": "read_coils",
-       "parameters": {"address": 0, "count": 5}
+       "parameters": {"address": 0, "count": 5, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Coils 0 to 4: [False, False, False, False, False]`
@@ -150,7 +152,7 @@ The configuration file:
      ```json
      {
        "tool": "write_coil",
-       "parameters": {"address": 5, "value": true}
+       "parameters": {"address": 5, "value": true, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Successfully wrote True to coil 5`
@@ -164,7 +166,7 @@ The configuration file:
      ```json
      {
        "tool": "read_input_registers",
-       "parameters": {"address": 2, "count": 3}
+       "parameters": {"address": 2, "count": 3, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Input Registers 2 to 4: [<value1>, <value2>, <value3>]`
@@ -178,7 +180,7 @@ The configuration file:
      ```json
      {
        "tool": "read_multiple_holding_registers",
-       "parameters": {"address": 0, "count": 3}
+       "parameters": {"address": 0, "count": 3, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Holding Registers 0 to 2: [<value1>, <value2>, <value3>]`
