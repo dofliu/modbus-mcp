@@ -124,7 +124,7 @@ The configuration file:
      ```json
      {
        "tool": "write_register",
-       "parameters": {"address": 10, "value": 100, `slave_id`: `1`}
+       "parameters": {"address": 10, "value": 100, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Successfully wrote 100 to register 10`
@@ -138,7 +138,7 @@ The configuration file:
      ```json
      {
        "tool": "read_coils",
-       "parameters": {"address": 0, "count": 5, `slave_id`: `1`}
+       "parameters": {"address": 0, "count": 5, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Coils 0 to 4: [False, False, False, False, False]`
@@ -152,7 +152,7 @@ The configuration file:
      ```json
      {
        "tool": "write_coil",
-       "parameters": {"address": 5, "value": true, `slave_id`: `1`}
+       "parameters": {"address": 5, "value": true, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Successfully wrote True to coil 5`
@@ -166,7 +166,7 @@ The configuration file:
      ```json
      {
        "tool": "read_input_registers",
-       "parameters": {"address": 2, "count": 3, `slave_id`: `1`}
+       "parameters": {"address": 2, "count": 3, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Input Registers 2 to 4: [<value1>, <value2>, <value3>]`
@@ -180,7 +180,7 @@ The configuration file:
      ```json
      {
        "tool": "read_multiple_holding_registers",
-       "parameters": {"address": 0, "count": 3, `slave_id`: `1`}
+       "parameters": {"address": 0, "count": 3, "slave_id": 1}
      }
      ```
    - **Expected Output**: `Holding Registers 0 to 2: [<value1>, <value2>, <value3>]`
